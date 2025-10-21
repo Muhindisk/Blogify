@@ -1,6 +1,6 @@
 import Comment from '../models/Comment.js';
-import Post from '../models/Post.js';
-import User from '../models/User.js';
+import Post from '../models/post.js';
+import User from '../models/user.js';
 
 // @desc    Get comments for a post
 // @route   GET /api/posts/:postId/comments

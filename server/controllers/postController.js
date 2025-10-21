@@ -1,5 +1,5 @@
-import Post from '../models/Post.js';
-import User from '../models/User.js';
+import Post from '../models/post.js';
+import User from '../models/user.js';
 import Comment from '../models/Comment.js';
 import { validationResult } from 'express-validator';
 

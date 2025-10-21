@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User from '../models/user.js';
 
 // @desc    Get user notifications
 // @route   GET /api/notifications
