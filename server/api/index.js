@@ -97,6 +97,17 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/posts', commentRoutes);
 app.use('/api/comments', commentRoutes);
 
+// 404 handler - must be after all routes
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found',
+    path: req.path,
+    method: req.method,
+    message: `Cannot ${req.method} ${req.path}`
+  });
+});
+
 // Error handling
 app.use((err, req, res, next) => {
   console.error('Error:', err);
