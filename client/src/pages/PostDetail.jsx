@@ -13,6 +13,18 @@ const PostDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
 
+  // Helper function to get full image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    // If already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    // For relative paths, construct full URL
+    const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000';
+    return `${baseUrl}${imagePath}`;
+  };
+
   useEffect(() => {
     loadPost();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +125,7 @@ const PostDetail = () => {
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
         {post.featuredImage && (
           <img 
-            src={post.featuredImage} 
+            src={getImageUrl(post.featuredImage)} 
             alt={post.title}
             className="w-full h-96 object-cover"
           />

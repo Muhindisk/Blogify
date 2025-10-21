@@ -15,6 +15,18 @@ const Home = () => {
   const { posts, pagination, loading, error, fetchPosts } = usePosts();
   const { request } = useApi();
 
+  // Helper function to get full image URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return null;
+    // If already a full URL, return as is
+    if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+      return imagePath;
+    }
+    // For relative paths, construct full URL
+    const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000';
+    return `${baseUrl}${imagePath}`;
+  };
+
   // Load categories only once on mount
   useEffect(() => {
     const loadCategories = async () => {
@@ -194,11 +206,22 @@ const Home = () => {
             className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
           >
             {post.featuredImage ? (
-              <img 
-                src={post.featuredImage} 
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
+              <>
+                <img 
+                  src={getImageUrl(post.featuredImage)} 
+                  alt={post.title}
+                  className="w-full h-48 object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 p-6 h-48 hidden items-center justify-center">
+                  <p className="text-gray-700 dark:text-gray-300 line-clamp-5 text-sm leading-relaxed">
+                    {post.content?.substring(0, 250)}...
+                  </p>
+                </div>
+              </>
             ) : (
               <div className="w-full bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-900/30 dark:to-primary-800/30 p-6 h-48 flex items-center justify-center">
                 <p className="text-gray-700 dark:text-gray-300 line-clamp-5 text-sm leading-relaxed">
