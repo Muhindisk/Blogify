@@ -80,7 +80,8 @@ const Home = () => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${apiBaseUrl}/posts/${postId}/like`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
