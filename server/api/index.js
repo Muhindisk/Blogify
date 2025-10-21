@@ -56,12 +56,41 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// Ensure DB connection before processing requests
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    res.status(503).json({
+      success: false,
+      error: 'Database connection unavailable',
+      message: error.message
+    });
+  }
+});
+
 // Root route
 app.get('/', (req, res) => {
   res.json({ 
     message: 'MERN Blog API is running',
     status: 'ok',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Simple test route that doesn't need DB
+app.get('/api/test', (req, res) => {
+  res.json({
+    success: true,
+    message: 'API routes working',
+    routes: [
+      '/api/posts',
+      '/api/categories',
+      '/api/auth',
+      '/api/users'
+    ]
   });
 });
 
@@ -87,6 +116,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 // API routes
+console.log('Registering routes...');
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/auth', authRoutes);
@@ -96,6 +126,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/posts', commentRoutes);
 app.use('/api/comments', commentRoutes);
+console.log('Routes registered successfully');
 
 // 404 handler - must be after all routes
 app.use((req, res, next) => {
