@@ -59,19 +59,9 @@ async function connectToDatabase() {
   }
 }
 
-// Middleware to ensure database connection
-app.use(async (req, res, next) => {
-  try {
-    await connectToDatabase();
-    next();
-  } catch (error) {
-    console.error('Database connection error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Database connection failed',
-      details: error.message 
-    });
-  }
+// Initialize database connection
+connectToDatabase().catch(err => {
+  console.error('Initial database connection failed:', err);
 });
 
 // Middleware
@@ -106,7 +96,20 @@ app.use('/api/comments', commentRoutes); // Individual comment routes
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('MERN Blog API is running');
+  res.json({ 
+    message: 'MERN Blog API is running',
+    status: 'ok',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Simple test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    success: true, 
+    message: 'API endpoint working',
+    environment: process.env.NODE_ENV
+  });
 });
 
 // Health check endpoint
