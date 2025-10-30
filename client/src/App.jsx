@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AppProvider } from './context/AppContext';
+import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
@@ -21,15 +21,16 @@ import Notifications from './pages/Notifications';
 import UserProfile from './pages/UserProfile';
 import EditProfile from './pages/EditProfile';
 
-function App() {
+function AppContent() {
+  const { user } = useApp();
+
   return (
-    <AppProvider>
-      <Router>
-        <ScrollToTop />
-        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 transition-colors">
-          <Navbar />
-          <Sidebar />
-          <main className="flex-1 transition-all duration-300 lg:ml-64 px-4 py-8">
+    <Router>
+      <ScrollToTop />
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 transition-colors">
+        <Navbar />
+        {user && <Sidebar />}
+        <main className={`flex-1 transition-all duration-300 ${user ? 'lg:ml-64' : ''} px-4 py-8`}>
             <div className="container mx-auto max-w-7xl">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -53,6 +54,13 @@ function App() {
           <Footer />
         </div>
       </Router>
+    );
+}
+
+function App() {
+  return (
+    <AppProvider>
+      <AppContent />
     </AppProvider>
   );
 }

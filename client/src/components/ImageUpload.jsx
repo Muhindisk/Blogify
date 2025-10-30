@@ -180,8 +180,8 @@ const ImageUpload = ({ onUploadSuccess, currentImage }) => {
       )}
 
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        <strong>Option 1:</strong> Upload from your computer (JPEG, PNG, GIF, WebP - Max 5MB)<br />
-        <strong>Option 2:</strong> Use "Add Image URL" to paste a link to an image from Imgur, Cloudinary, or any image hosting service
+        <strong>Option 1:</strong> Upload from your computer (stored on ImgBB - JPEG, PNG, GIF, WebP - Max 5MB)<br />
+        <strong>Option 2:</strong> Use "Add Image URL" to paste a link to an image from any image hosting service
       </p>
     </div>
   );
